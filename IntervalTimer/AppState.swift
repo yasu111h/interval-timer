@@ -18,7 +18,7 @@ struct StopwatchItem: Identifiable {
 struct IntervalTimerState {
     var nextAlarmSeconds: Int = 0
     var isRunning: Bool = false
-    var selectedInterval: Int = 5
+    var selectedInterval: Int = 1
 
     var nextAlarmFormatted: String {
         let m = nextAlarmSeconds / 60

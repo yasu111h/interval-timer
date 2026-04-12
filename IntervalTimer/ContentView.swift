@@ -29,11 +29,12 @@ struct ContentView: View {
         .onReceive(clockTimer) { t in now = t }
     }
 
-    // MARK: - 折りたたみ表示
+    // MARK: - 通常表示（時刻なし・数値のみ）
 
     private var collapsedView: some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
+                // ストップウォッチ（最大3つ）
                 ForEach(state.stopwatches) { sw in
                     HStack(spacing: 6) {
                         Circle()
@@ -45,6 +46,7 @@ struct ContentView: View {
                     }
                 }
 
+                // タイマー（1つ）
                 HStack(spacing: 6) {
                     Text("T")
                         .font(.system(size: 10, weight: .bold))
@@ -58,13 +60,14 @@ struct ContentView: View {
                 }
             }
 
+            // 展開ボタン（chevronでパネルの開閉を示す）
             Button {
                 withAnimation(.easeInOut(duration: 0.15)) {
                     isExpanded.toggle()
                 }
             } label: {
-                Image(systemName: isExpanded ? "xmark" : "slider.horizontal.3")
-                    .font(.system(size: 11))
+                Image(systemName: isExpanded ? "chevron.down" : "chevron.up")
+                    .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.white.opacity(0.5))
                     .frame(width: 18, height: 18)
             }
@@ -78,7 +81,7 @@ struct ContentView: View {
 
     private var expandedPanel: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 現在時刻（展開時のみ）
+            // 現在時刻（展開時のみ表示）
             Text(now, format: .dateTime.hour(.twoDigits(amPM: .omitted)).minute().second())
                 .font(.system(size: 11, weight: .regular, design: .monospaced))
                 .foregroundStyle(.white.opacity(0.4))
@@ -88,7 +91,7 @@ struct ContentView: View {
 
             divider
 
-            // ストップウォッチセクション
+            // ストップウォッチ操作
             VStack(alignment: .leading, spacing: 5) {
                 ForEach(state.stopwatches) { sw in
                     HStack(spacing: 8) {
@@ -97,6 +100,7 @@ struct ContentView: View {
                             .foregroundStyle(.white.opacity(0.85))
                             .frame(width: 72, alignment: .leading)
 
+                        // 再生/停止
                         Button { state.toggleStopwatch(sw.id) } label: {
                             Image(systemName: sw.isRunning ? "stop.fill" : "play.fill")
                                 .font(.system(size: 11))
@@ -104,6 +108,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(.plain)
 
+                        // 削除
                         Button { state.removeStopwatch(sw.id) } label: {
                             Image(systemName: "minus.circle")
                                 .font(.system(size: 11))
@@ -113,6 +118,7 @@ struct ContentView: View {
                     }
                 }
 
+                // SW追加（3つ未満のとき）
                 if state.stopwatches.count < 3 {
                     Button { state.addStopwatch() } label: {
                         Label("SW追加", systemImage: "plus")
@@ -127,8 +133,9 @@ struct ContentView: View {
 
             divider
 
-            // インターバルタイマーセクション
+            // インターバルタイマー操作
             VStack(alignment: .leading, spacing: 6) {
+                // インターバル選択
                 HStack(spacing: 3) {
                     ForEach(state.intervals, id: \.self) { min in
                         let selected = state.intervalTimer.selectedInterval == min
@@ -147,6 +154,7 @@ struct ContentView: View {
                     }
                 }
 
+                // 再生/停止 + 次のアラームまでの時間
                 HStack(spacing: 8) {
                     Button {
                         state.intervalTimer.isRunning ? state.stopIntervalTimer() : state.startIntervalTimer()
@@ -175,4 +183,3 @@ struct ContentView: View {
             .frame(height: 0.5)
     }
 }
-
