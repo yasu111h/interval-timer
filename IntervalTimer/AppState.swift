@@ -88,15 +88,12 @@ class AppState: ObservableObject {
     }
 
     private func playAlarm() {
-        // ファイルパスで直接指定（最も確実）
-        let candidates = ["Glass", "Ping", "Tink", "Basso", "Blow"]
-        for name in candidates {
-            let path = "/System/Library/Sounds/\(name).aiff"
-            if let sound = NSSound(contentsOfFile: path, byReference: false) {
-                sound.play()
-                return
+        // Bassoを3連続で鳴らしてアラームらしい音にする
+        let path = "/System/Library/Sounds/Basso.aiff"
+        for i in 0..<3 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.45) {
+                NSSound(contentsOfFile: path, byReference: false)?.play()
             }
         }
-        NSSound.beep()
     }
 }
