@@ -27,11 +27,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.isOpaque = false
             window.hasShadow = true
 
-            // 初期位置: 画面右上
+            // トラフィックライト（×・最小化・最大化）を非表示
+            window.standardWindowButton(.closeButton)?.isHidden = true
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
+
+            // 初期位置: 画面右下
             if let screen = NSScreen.main {
                 let x = screen.visibleFrame.maxX - 260
-                let y = screen.visibleFrame.maxY - 10
-                window.setFrameTopLeftPoint(NSPoint(x: x, y: y))
+                let y = screen.visibleFrame.minY + 10
+                window.setFrameOrigin(NSPoint(x: x, y: y))
             }
         }
     }
