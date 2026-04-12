@@ -69,6 +69,12 @@ struct ContentView: View {
                         Text(sw.formatted)
                             .font(.system(size: 13, weight: .regular, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.9))
+                        Button { state.toggleStopwatch(sw.id) } label: {
+                            Image(systemName: sw.isRunning ? "stop.fill" : "play.fill")
+                                .font(.system(size: 10))
+                                .foregroundStyle(sw.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
 
@@ -87,6 +93,14 @@ struct ContentView: View {
                             .font(.system(size: 13, weight: .regular, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.8))
                     }
+                    Button {
+                        state.intervalTimer.isRunning ? state.stopIntervalTimer() : state.startIntervalTimer()
+                    } label: {
+                        Image(systemName: state.intervalTimer.isRunning ? "stop.fill" : "play.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(state.intervalTimer.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                    }
+                    .buttonStyle(.plain)
                 }
             }
 
