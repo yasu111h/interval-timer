@@ -22,3 +22,6 @@ build/
 
 # Sources folder (作業用コピー、本体はIntervalTimer/)
 Sources/
+
+# 個人メモ（git管理外）
+notes.md
