@@ -111,9 +111,13 @@ struct ContentView: View {
                 }
             } label: {
                 Image(systemName: isExpanded ? "chevron.down" : "chevron.up")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.6))
-                    .frame(width: 18, height: 18)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .frame(width: 28, height: 28)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Color.white.opacity(0.15))
+                    )
             }
             .buttonStyle(.plain)
         }
@@ -153,6 +157,13 @@ struct ContentView: View {
                             Image(systemName: sw.isRunning ? "stop.fill" : "play.fill")
                                 .font(.system(size: 11))
                                 .foregroundStyle(sw.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                        }
+                        .buttonStyle(.plain)
+
+                        Button { state.resetStopwatch(sw.id) } label: {
+                            Image(systemName: "arrow.counterclockwise")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white.opacity(0.7))
                         }
                         .buttonStyle(.plain)
 
@@ -210,22 +221,6 @@ struct ContentView: View {
                     }
                 }
 
-                HStack(spacing: 8) {
-                    Button {
-                        state.intervalTimer.isRunning ? state.stopIntervalTimer() : state.startIntervalTimer()
-                    } label: {
-                        Image(systemName: state.intervalTimer.isRunning ? "stop.fill" : "play.fill")
-                            .font(.system(size: 13))
-                            .foregroundStyle(state.intervalTimer.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
-                    }
-                    .buttonStyle(.plain)
-
-                    if state.intervalTimer.isRunning {
-                        Text("next \(state.intervalTimer.nextAlarmFormatted)")
-                            .font(.system(size: 11, design: .monospaced))
-                            .foregroundStyle(.orange.opacity(0.9))
-                    }
-                }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)

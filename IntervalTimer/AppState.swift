@@ -18,7 +18,7 @@ struct StopwatchItem: Identifiable {
 struct IntervalTimerState {
     var nextAlarmSeconds: Int = 0
     var isRunning: Bool = false
-    var selectedInterval: Int = 1
+    var selectedInterval: Int = 5
 
     var nextAlarmFormatted: String {
         let m = nextAlarmSeconds / 60
@@ -67,6 +67,12 @@ class AppState: ObservableObject {
     func toggleStopwatch(_ id: UUID) {
         guard let i = stopwatches.firstIndex(where: { $0.id == id }) else { return }
         stopwatches[i].isRunning.toggle()
+    }
+
+    func resetStopwatch(_ id: UUID) {
+        guard let i = stopwatches.firstIndex(where: { $0.id == id }) else { return }
+        stopwatches[i].elapsedSeconds = 0
+        stopwatches[i].isRunning = false
     }
 
     // MARK: - Interval timer
