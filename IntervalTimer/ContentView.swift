@@ -70,9 +70,15 @@ struct ContentView: View {
                             .font(.system(size: 13, weight: .regular, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.9))
                         Button { state.toggleStopwatch(sw.id) } label: {
-                            Image(systemName: sw.isRunning ? "stop.fill" : "play.fill")
+                            Image(systemName: sw.isRunning ? "pause.fill" : "play.fill")
                                 .font(.system(size: 10))
-                                .foregroundStyle(sw.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                                .foregroundStyle(sw.isRunning ? Color.yellow.opacity(0.9) : Color.green.opacity(0.9))
+                        }
+                        .buttonStyle(.plain)
+                        Button { state.resetStopwatch(sw.id) } label: {
+                            Image(systemName: "stop.fill")
+                                .font(.system(size: 10))
+                                .foregroundStyle(Color.red.opacity(0.9))
                         }
                         .buttonStyle(.plain)
                     }
@@ -84,21 +90,27 @@ struct ContentView: View {
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.orange)
                         .frame(width: 7, alignment: .center)
-                    if state.intervalTimer.isRunning {
+                    if state.intervalTimer.isRunning || state.intervalTimer.isPaused {
                         Text(state.intervalTimer.nextAlarmFormatted)
                             .font(.system(size: 13, weight: .regular, design: .monospaced))
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(state.intervalTimer.isRunning ? .orange : .orange.opacity(0.6))
                     } else {
                         Text("\(state.intervalTimer.selectedInterval)m")
                             .font(.system(size: 13, weight: .regular, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.8))
                     }
                     Button {
-                        state.intervalTimer.isRunning ? state.stopIntervalTimer() : state.startIntervalTimer()
+                        state.intervalTimer.isRunning ? state.pauseIntervalTimer() : state.startIntervalTimer()
                     } label: {
-                        Image(systemName: state.intervalTimer.isRunning ? "stop.fill" : "play.fill")
+                        Image(systemName: state.intervalTimer.isRunning ? "pause.fill" : "play.fill")
                             .font(.system(size: 10))
-                            .foregroundStyle(state.intervalTimer.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                            .foregroundStyle(state.intervalTimer.isRunning ? Color.yellow.opacity(0.9) : Color.green.opacity(0.9))
+                    }
+                    .buttonStyle(.plain)
+                    Button { state.resetIntervalTimer() } label: {
+                        Image(systemName: "stop.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color.red.opacity(0.9))
                     }
                     .buttonStyle(.plain)
                 }
@@ -154,16 +166,16 @@ struct ContentView: View {
                             .frame(width: 72, alignment: .leading)
 
                         Button { state.toggleStopwatch(sw.id) } label: {
-                            Image(systemName: sw.isRunning ? "stop.fill" : "play.fill")
+                            Image(systemName: sw.isRunning ? "pause.fill" : "play.fill")
                                 .font(.system(size: 11))
-                                .foregroundStyle(sw.isRunning ? Color.red.opacity(0.9) : Color.green.opacity(0.9))
+                                .foregroundStyle(sw.isRunning ? Color.yellow.opacity(0.9) : Color.green.opacity(0.9))
                         }
                         .buttonStyle(.plain)
 
                         Button { state.resetStopwatch(sw.id) } label: {
-                            Image(systemName: "arrow.counterclockwise")
+                            Image(systemName: "stop.fill")
                                 .font(.system(size: 11))
-                                .foregroundStyle(.white.opacity(0.7))
+                                .foregroundStyle(Color.red.opacity(0.9))
                         }
                         .buttonStyle(.plain)
 

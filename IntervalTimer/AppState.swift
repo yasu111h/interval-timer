@@ -20,6 +20,9 @@ struct IntervalTimerState {
     var isRunning: Bool = false
     var selectedInterval: Int = 5
 
+    // 一時停止中（開始済みでisRunning=false）かどうか
+    var isPaused: Bool = false
+
     var nextAlarmFormatted: String {
         let m = nextAlarmSeconds / 60
         let s = nextAlarmSeconds % 60
@@ -78,12 +81,22 @@ class AppState: ObservableObject {
     // MARK: - Interval timer
 
     func startIntervalTimer() {
-        intervalTimer.nextAlarmSeconds = intervalTimer.selectedInterval * 60
+        if intervalTimer.nextAlarmSeconds == 0 {
+            intervalTimer.nextAlarmSeconds = intervalTimer.selectedInterval * 60
+        }
         intervalTimer.isRunning = true
+        intervalTimer.isPaused = false
     }
 
-    func stopIntervalTimer() {
+    func pauseIntervalTimer() {
         intervalTimer.isRunning = false
+        intervalTimer.isPaused = true
+    }
+
+    func resetIntervalTimer() {
+        intervalTimer.isRunning = false
+        intervalTimer.isPaused = false
+        intervalTimer.nextAlarmSeconds = 0
     }
 
     func setInterval(_ minutes: Int) {
