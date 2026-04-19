@@ -118,8 +118,3 @@ struct ContentView: View {
         .padding(.bottom, 8)
     }
 }
-
-#Preview {
-    ContentView()
-        .frame(width: 260)
-}

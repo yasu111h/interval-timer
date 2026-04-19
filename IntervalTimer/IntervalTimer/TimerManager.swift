@@ -43,11 +43,17 @@ class TimerManager: ObservableObject {
     }
 
     private func playAlarm() {
-        // macOSシステムサウンドを再生（"Glass"は明瞭で聞き取りやすい）
-        if let sound = NSSound(named: NSSound.Name("Glass")) {
-            sound.play()
-        } else {
-            NSSound.beep()
+        // "Funk"を8回・0.35秒間隔で繰り返して鳴らす（けたたましいアラーム）
+        let repeatCount = 8
+        let interval = 0.35
+        for i in 0..<repeatCount {
+            DispatchQueue.main.asyncAfter(deadline: .now() + interval * Double(i)) {
+                if let sound = NSSound(named: NSSound.Name("Funk")) {
+                    sound.play()
+                } else {
+                    NSSound.beep()
+                }
+            }
         }
     }
 
